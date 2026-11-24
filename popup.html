@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Чиби-маскот</title>
+<style>
+  :root { --bg:#fff; --fg:#1d1d1f; --muted:#6b7280; --line:#e5e7eb; --accent:#c0392b; --sel:rgba(192,57,43,.12); }
+  @media (prefers-color-scheme: dark) { :root { --bg:#16171a; --fg:#f2f2f3; --muted:#9aa0a6; --line:#2c2e33; --accent:#ff6b5a; --sel:rgba(255,107,90,.15); } }
+  html, body { overflow-x:hidden; }
+  body { margin:0; width:310px; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui, sans-serif; }
+  header { display:flex; align-items:center; gap:10px; padding:14px 16px 10px; border-bottom:1px solid var(--line); }
+  header img { width:46px; height:46px; object-fit:contain; }
+  header b { font-size:15px; } header small { display:block; color:var(--muted); font-size:12px; }
+  .mood { height:5px; border-radius:3px; background:var(--line); margin-top:5px; overflow:hidden; }
+  .mood i { display:block; height:100%; width:0; background:linear-gradient(90deg,#e74c3c,#f1c40f,#2ecc71); background-size:300px 100%; transition:width .3s; }
+  main { padding:12px 16px 14px; display:grid; gap:12px; }
+  h3 { margin:6px 0 -4px; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  label { display:grid; gap:6px; font-weight:600; font-size:13px; }
+  .lbl { display:flex; justify-content:space-between; }
+  input[type=range] { width:100%; accent-color:var(--accent); margin:0; }
+  input[type=text], input[type=password] { font:inherit; font-size:13px; font-weight:400; padding:6px 8px; border:1px solid var(--line);
+    border-radius:8px; background:transparent; color:inherit; width:100%; box-sizing:border-box; }
+  .row { display:flex; justify-content:space-between; align-items:center; gap:10px; font-weight:500; }
+  .row input { accent-color:var(--accent); width:16px; height:16px; flex:none; }
+  .row small { display:block; color:var(--muted); font-size:11px; font-weight:400; }
+  .val { color:var(--muted); font-weight:500; }
+  .skins { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; }
+  .skins button { padding:4px 2px 3px; display:grid; justify-items:center; gap:2px; font-size:10px; color:var(--muted);
+                  border:1px solid var(--line); border-radius:8px; background:transparent; cursor:pointer; }
+  .skins button img { width:100%; height:46px; object-fit:contain; }
+  .skins button.on { border-color:var(--accent); background:var(--sel); color:var(--fg); }
+  .skins .rnd { font-size:22px; height:46px; display:grid; place-items:center; }
+  .ai { display:grid; gap:10px; padding:10px; border:1px solid var(--line); border-radius:10px; }
+  .ai[data-off] .dep { opacity:.45; }
+  textarea { font:inherit; font-size:12px; font-weight:400; padding:6px 8px; border:1px solid var(--line); border-radius:8px; background:transparent; color:inherit; resize:vertical; width:100%; box-sizing:border-box; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  input[type=time] { font:inherit; font-size:13px; padding:5px 6px; border:1px solid var(--line); border-radius:8px; background:transparent; color:inherit; }
+  .days { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+  .days button { font:inherit; font-size:11px; font-weight:600; padding:5px 0; border:1px solid var(--line); border-radius:6px; background:transparent; color:var(--muted); cursor:pointer; }
+  .days button.on { background:var(--sel); color:var(--fg); border-color:var(--accent); }
+  .cult { display:grid; gap:5px; padding:10px; border:1px solid var(--line); border-radius:10px; }
+  .cult small { color:var(--muted); font-size:11px; }
+  .ach { display:flex; flex-wrap:wrap; gap:4px; }
+  .ach span { font-size:10.5px; padding:2px 6px; border-radius:10px; background:var(--sel); }
+  .ach span.off { background:transparent; border:1px dashed var(--line); color:var(--muted); }
+  .seg { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .seg button { font:inherit; font-size:12px; font-weight:600; padding:6px; border:0; background:transparent; color:var(--muted); cursor:pointer; }
+  .seg button.on { background:var(--sel); color:var(--fg); }
+  .seg3 { grid-template-columns:1fr 1fr 1fr; }
+  .hint { display:block; color:var(--muted); font-size:11px; font-weight:400; margin-top:4px; }
+  #gem, #cla { display:grid; gap:10px; }
+  #gem[hidden], #cla[hidden] { display:none; }
+  .note { color:var(--muted); font-size:11px; font-weight:400; }
+  .note a { color:var(--accent); }
+  .btn { font:inherit; font-size:12px; padding:6px 10px; border:1px solid var(--line); border-radius:8px; background:transparent; color:var(--muted); cursor:pointer; }
+  .btn:hover { color:var(--fg); }
+  footer { color:var(--muted); font-size:11px; padding:0 16px 12px; }
+</style>
+</head>
+<body>
+<header>
+  <img id="logo" src="poses/cloak/wave.webp" alt="">
+  <div style="flex:1"><b id="title">Чиби-маскот</b><small>Один на весь браузер</small></div>
+</header>
+<main>
+  <div class="row">Включён <input id="enabled" type="checkbox"></div>
+  <div class="row"><span>На этом сайте <span class="val" id="host"></span></span> <input id="site" type="checkbox"></div>
+
+  <label>Образ (годы)
+    <div class="skins" id="skins"></div>
+  </label>
+  <label><span class="lbl">Размер <span class="val" id="sizeVal"></span></span>
+    <input id="size" type="range" min="70" max="300" step="10">
+  </label>
+  <label><span class="lbl">Скорость ходьбы <span class="val" id="speedVal"></span></span>
+    <input id="speed" type="range" min="0.4" max="2.5" step="0.1">
+  </label>
+
+  <div class="cult" id="cult">
+    <div class="lbl"><b id="realm">—</b><span class="val" id="xpTxt"></span></div>
+    <div class="mood"><i id="xpBar" style="background:linear-gradient(90deg,#f6d365,#fda085)"></i></div>
+    <small id="statsTxt"></small>
+    <div class="ach" id="ach"></div>
+  </div>
+
+  <h3>Поведение</h3>
+  <div class="row"><span>Закрепить наверху 📌<small>сидит на верхнем краю окна; или перетащи его к верху</small></span> <input id="pinTop" type="checkbox"></div>
+  <div class="row"><span>Физика<small>бросок с разгона, отскоки, кувырки</small></span> <input id="physics" type="checkbox"></div>
+  <label><span class="lbl">Скорость физики <span class="val" id="physSpeedVal"></span></span>
+    <input id="physSpeed" type="range" min="0.3" max="1.5" step="0.05">
+  </label>
+  <div class="row"><span>Ходит по сайту<small>запрыгивает на картинки, кнопки, заголовки</small></span> <input id="platforms" type="checkbox"></div>
+  <div class="row">Засыпает, когда ты отошёл <input id="sleepIdle" type="checkbox"></div>
+  <div class="row">Реплики в облачке <input id="bubbles" type="checkbox"></div>
+
+  <div class="cult"><b>📊 Сегодня</b><small id="todayTxt">—</small></div>
+
+  <h3>Звук и голос</h3>
+  <div class="row">Звуки <input id="sound" type="checkbox"></div>
+  <label><span class="lbl">Громкость <span class="val" id="volumeVal"></span></span>
+    <input id="volume" type="range" min="0.05" max="1" step="0.05">
+  </label>
+  <div class="row"><span>Шаги<small>тихий топот при ходьбе</small></span> <input id="steps" type="checkbox"></div>
+  <div class="row"><span>Голос 🗣<small>говорит реплики вслух (синтез речи браузера)</small></span> <input id="voice" type="checkbox"></div>
+
+  <h3>Рабочий день</h3>
+  <div class="row"><span>Напоминания по графику<small>начало, перерывы, обед, вода, конец дня</small></span> <input id="schedOn" type="checkbox"></div>
+  <div class="two">
+    <label>Начало <input id="workStart" type="time"></label>
+    <label>Конец <input id="workEnd" type="time"></label>
+  </div>
+  <label>Перерывы <input id="breaks" type="text" placeholder="11:00-11:10, 13:00-14:00"></label>
+  <div class="days" id="days"></div>
+  <div class="row"><span>Уведомления Windows<small>когда браузер свёрнут</small></span> <input id="notify" type="checkbox"></div>
+  <button class="btn" id="schedTest" type="button">Проверить: «перерыв!»</button>
+  <div class="row"><span>Режим фокуса 🎯<small>в рабочее время мягко отгоняет с отвлекающих сайтов</small></span> <input id="focusOn" type="checkbox"></div>
+  <label>Отвлекающие сайты <textarea id="focusSites" rows="2"></textarea></label>
+  <div class="row"><span>Погода утром 🌤<small>в начале рабочего дня; или «Погода» в меню</small></span> <input id="weatherOn" type="checkbox"></div>
+  <label>Город <input id="city" type="text" placeholder="Ташкент"></label>
+
+  <h3>Дополнительно</h3>
+  <div class="row"><span>Своя страница «сайт не открылся»<small>вместо экрана ошибки Chrome: он объясняет причину и сам открывает сайт, когда сеть вернётся</small></span> <input id="errorPage" type="checkbox"></div>
+  <div class="row"><span>Сдувает cookie-баннеры 💨<small>прячет плашки «мы используем cookie»</small></span> <input id="cookieBlow" type="checkbox"></div>
+
+  <h3>Чтение сайта</h3>
+  <div class="row"><span>Исследует страницу<small>сам находит кнопки, поля, картинки, цены; запрыгивает на поле, где ты печатаешь</small></span> <input id="explore" type="checkbox"></div>
+  <div class="row"><span>Ловит ошибки 🐞<small>404/500, упавшие скрипты и запросы, битые картинки, пропавший интернет</small></span> <input id="errors" type="checkbox"></div>
+  <div class="row"><span>Говорит о сайте<small>понимает тему: код, видео, новеллы, акции…</small></span> <input id="pageTalk" type="checkbox"></div>
+  <div class="row"><span>Реагирует на выделение<small>считает выделенные примеры: 12*7+5</small></span> <input id="selectTalk" type="checkbox"></div>
+
+  <div class="ai" id="aiBox">
+    <div class="row"><span>Умный режим (Gemini / Claude)<small>выдели текст и кликни на него — объяснит; двойной клик — задать вопрос</small></span> <input id="ai" type="checkbox"></div>
+    <div class="seg dep" id="provider">
+      <button type="button" data-p="gemini">Gemini</button><button type="button" data-p="claude">Claude</button>
+    </div>
+    <div class="dep" id="gem">
+      <label>Ключ Gemini API
+        <input id="apiKey" type="password" placeholder="AIza…" autocomplete="off" spellcheck="false">
+        <span class="note">Бесплатный ключ: <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a></span>
+      </label>
+      <label>Модель
+        <input id="model" type="text" spellcheck="false">
+      </label>
+    </div>
+    <div class="dep" id="cla" hidden>
+      <label>Ключ Claude API
+        <input id="claudeKey" type="password" placeholder="sk-ant-…" autocomplete="off" spellcheck="false">
+        <span class="note">Ключ: <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>. API оплачивается отдельно от подписки Claude Pro.</span>
+      </label>
+      <label>Модель
+        <input id="claudeModel" type="text" spellcheck="false">
+      </label>
+    </div>
+    <span class="note dep">Ключи хранятся только в этом браузере.</span>
+    <label class="dep">Имя маскота
+      <input id="name" type="text" maxlength="30">
+    </label>
+    <div class="row dep"><span>Сам комментирует сайты<small>не чаще раза в 4 минуты; не там, где поле пароля</small></span> <input id="aiComments" type="checkbox"></div>
+  </div>
+
+  <button class="btn" id="reset" type="button">Сбросить настройки</button>
+</main>
+<footer>Клик — реакция · перетащи и брось — полетит · двойной клик — вопрос. Изменения применяются сразу.</footer>
+<script src="popup.js"></script>
+</body>
+</html>
