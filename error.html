@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Страница не открылась</title>
+<style>
+  :root { color-scheme: light dark; --bg:#f4f3f0; --fg:#1d1d1f; --muted:#6b7280; --card:#fff; --line:#e5e7eb; --accent:#c0392b; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141518; --fg:#eeeef0; --muted:#9aa0a6; --card:#1d1f23; --line:#2c2e33; --accent:#ff6b5a; } }
+  html, body { height:100%; margin:0; }
+  body { background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, sans-serif; display:grid; place-items:center; }
+  .card { width:min(560px, 92vw); background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px 30px; box-shadow:0 10px 40px rgba(0,0,0,.08); }
+  .code { font:600 12px ui-monospace, monospace; color:var(--accent); letter-spacing:.04em; }
+  h1 { margin:6px 0 8px; font-size:24px; }
+  p { margin:0 0 10px; color:var(--muted); }
+  .url { font:13px ui-monospace, monospace; word-break:break-all; background:rgba(127,127,127,.08); border-radius:8px; padding:8px 10px; margin:12px 0 18px; color:var(--fg); }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  button { font:inherit; font-weight:600; padding:9px 16px; border-radius:10px; border:1px solid var(--line); background:transparent; color:var(--fg); cursor:pointer; }
+  button.main { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .hint { margin-top:14px; font-size:13px; color:var(--muted); }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="code" id="code">ERR</div>
+    <h1 id="title">Страница не открылась</h1>
+    <p id="why"></p>
+    <div class="url" id="url"></div>
+    <div class="row">
+      <button class="main" id="retry" type="button">Повторить</button>
+      <button id="back" type="button">Назад</button>
+    </div>
+    <div class="hint" id="hint"></div>
+  </div>
+  <script src="error.js"></script>
+  <script src="content.js"></script>
+</body>
+</html>
